@@ -1,17 +1,17 @@
-const equiposRouter = require('express').Router()
-const Equipo = require('../models/Equipo')
+const teamsRouter = require('express').Router()
+const Team = require('../models/Team')
 
-equiposRouter.get('/', (request, response) => {
-  Equipo.find({}).then(result => {
+teamsRouter.get('/', (request, response) => {
+  Team.find({}).then(result => {
     response.json(result)
   }).catch(error => {
     response.json(error)
   })
 })
 
-equiposRouter.get('/:nombre', (request, response, next) => {
+teamsRouter.get('/:nombre', (request, response, next) => {
   const nombre = String(request.params.nombre)
-  Equipo.find({ name: nombre }).then(result => {
+  Team.find({ name: nombre }).then(result => {
     if (result.length > 0) {
       response.json(result)
     } else {
@@ -22,29 +22,29 @@ equiposRouter.get('/:nombre', (request, response, next) => {
   })
 })
 
-equiposRouter.post('/', (request, response) => {
+teamsRouter.post('/', (request, response) => {
   const data = request.body
-  const equipo = new Equipo({
+  const team = new Team({
     name: data.name,
     country: data.country,
     players: data.players,
     coach: data.coach
   })
 
-  equipo.save().then(result => {
+  team.save().then(result => {
     response.status(201).json(result)
   }).catch(error => {
     response.status(400).json(error)
   })
 })
 
-equiposRouter.delete('/:nombre', (request, response, next) => {
+teamsRouter.delete('/:nombre', (request, response, next) => {
   const nombre = String(request.params.nombre)
-  Equipo.deleteOne({ name: nombre }).then(result => {
+  Team.deleteOne({ name: nombre }).then(result => {
     response.json(result)
   }).catch(error => {
     next(error)
   })
 })
 
-module.exports = equiposRouter
+module.exports = teamsRouter
