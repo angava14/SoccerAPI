@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
 
-const equipoSchema = mongoose.Schema({
+const teamSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -26,14 +26,14 @@ const equipoSchema = mongoose.Schema({
   }
 })
 
-equipoSchema.set('toJSON', {
+teamSchema.set('toJSON', {
   transform: function (doc, ret, opt) {
     ret.id = ret._id
     delete ret._id
     delete ret.__v
   }
 })
-equipoSchema.plugin(uniqueValidator)
-const Equipo = mongoose.model('Equipo', equipoSchema) // Nombre de la coleccion y schema
+teamSchema.plugin(uniqueValidator)
+const Team = mongoose.model('Equipo', teamSchema) // Nombre de la coleccion y schema
 
-module.exports = Equipo
+module.exports = Team

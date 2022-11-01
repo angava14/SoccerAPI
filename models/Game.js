@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const partidoSchema = mongoose.Schema({
+const gameSchema = mongoose.Schema({
   equipo1: String,
   equipo2: String,
   goles1: Number,
@@ -10,7 +10,7 @@ const partidoSchema = mongoose.Schema({
   jugado: Boolean
 })
 
-partidoSchema.set('toJSON', {
+gameSchema.set('toJSON', {
   transform: function (doc, ret, opt) {
     ret.id = ret._id
     delete ret._id
@@ -18,6 +18,6 @@ partidoSchema.set('toJSON', {
   }
 })
 
-const Partido = mongoose.model('Partido', partidoSchema) // Nombre de la coleccion y schema
+const Game = mongoose.model('Partido', gameSchema) // Nombre de la coleccion y schema
 
-module.exports = Partido
+module.exports = Game

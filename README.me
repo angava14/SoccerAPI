@@ -7,7 +7,10 @@
 
 2. http://localhost:3000/api/login
     -Method: POST
-    -Body: []
+    -Body: [{ 
+            username: String, 
+            password: String
+            }]
 
 3. http://localhost:3000/api/teams 
     -Method: GET
@@ -16,17 +19,22 @@
 4. http://localhost:3000/api/teams 
     -Method: POST
     -Headers: [Authentication : Bearer <Token>]
-    -Body: []
+    -Body: [{
+            name: String,
+            country: String,
+            players: [Array],
+            coach: String
+            }]
 
-5. http://localhost:3000/api/teams/:id 
+5. http://localhost:3000/api/teams/:name 
     -Method: GET
     -Headers: [Authentication : Bearer <Token>]
-    -Params: TeamID
+    -Params: TeamName
 
-6. http://localhost:3000/api/teams:/id 
+6. http://localhost:3000/api/teams/:name 
     -Method: DEL
     -Headers: [Authentication : Bearer <Token>]
-    -Params: TeamID
+    -Params: TeamName
 
 7. http://localhost:3000/api/games 
     -Method: GET
@@ -35,9 +43,21 @@
 8. http://localhost:3000/api/games 
     -Method: POST
     -Headers: [Authentication : Bearer <Token>]
-    -Body: []
+    -Body: [{
+            equipo1: String,
+            equipo2: String,
+            goles1: Number,
+            goles2: Number,
+            ciudad: String,
+            fecha: Date,
+            jugado: Boolean
+            }]
 
 9. http://localhost:3000/api/users 
     -Method: POST
     -Headers: [Authentication : Bearer <Token>]
-    -Body: []
+    -Body: [{ 
+            username: String, 
+            name: String, 
+            password: String
+            }]

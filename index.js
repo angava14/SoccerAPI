@@ -1,14 +1,14 @@
 require('dotenv').config()
 require('./connection')
-const express = require('express') // servidor
-const app = express() // Inicializa el servidor
+const express = require('express') // Server
+const app = express() // Init Server
 const cors = require('cors')
 const usersRouter = require('./controllers/users.js')
-const equiposRouter = require('./controllers/equipos.js')
-const partidosRouter = require('./controllers/partidos.js')
+const teamsRouter = require('./controllers/teams.js')
+const gamesRouter = require('./controllers/games.js')
 const loginRouter = require('./controllers/login.js')
 const auth = require('./middlewares/auth.js')
-app.use(express.json()) // Nueva forma de usar el body-parser
+app.use(express.json()) //  body-parser
 app.use(cors())
 
 app.use((request, response, next) => {
@@ -21,8 +21,8 @@ app.get('/', (request, response) => {
 })
 
 app.use('/api/login', loginRouter)
-app.use('/api/equipos', auth, equiposRouter)
-app.use('/api/partidos', auth, partidosRouter)
+app.use('/api/teams', auth, teamsRouter)
+app.use('/api/games', auth, gamesRouter)
 app.use('/api/users', auth, usersRouter)
 
 app.use((error, request, response, next) => {
