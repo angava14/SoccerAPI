@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const idPlugin = require('mongoose-id')
+
 const partidoSchema = mongoose.Schema({
   equipo1: String,
   equipo2: String,
@@ -9,7 +9,15 @@ const partidoSchema = mongoose.Schema({
   fecha: Date,
   jugado: Boolean
 })
-partidoSchema.plugin(idPlugin)
+
+partidoSchema.set('toJSON', {
+  transform: function (doc, ret, opt) {
+    ret.id = ret._id
+    delete ret._id
+    delete ret.__v
+  }
+})
+
 const Partido = mongoose.model('Partido', partidoSchema) // Nombre de la coleccion y schema
 
 module.exports = Partido

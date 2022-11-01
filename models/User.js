@@ -1,39 +1,35 @@
 const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
 
-const equipoSchema = mongoose.Schema({
-  name: {
+const userSchema = mongoose.Schema({
+  username: {
     type: String,
     required: true,
     unique: true
   },
-  country: {
+  name: {
     type: String,
     required: true
   },
-  players: {
-    type: Array,
-    required: true
-  },
-  coach: {
+  passwordHash: {
     type: String,
     required: true
   },
-  user: {
+  equipos: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    ref: 'Note'
   }
 })
 
-equipoSchema.set('toJSON', {
+userSchema.set('toJSON', {
   transform: function (doc, ret, opt) {
     ret.id = ret._id
     delete ret._id
+    delete ret.passwordHash
     delete ret.__v
   }
 })
-equipoSchema.plugin(uniqueValidator)
-const Equipo = mongoose.model('Equipo', equipoSchema) // Nombre de la coleccion y schema
+userSchema.plugin(uniqueValidator)
+const User = mongoose.model('User', userSchema) // Nombre de la coleccion y schema
 
-module.exports = Equipo
+module.exports = User

@@ -3,109 +3,36 @@ require('./connection')
 const express = require('express') // servidor
 const app = express() // Inicializa el servidor
 const cors = require('cors')
-const Equipo = require('./models/Equipo.js')
-const Partido = require('./models/Partido.js')
-
+const usersRouter = require('./controllers/users.js')
+const equiposRouter = require('./controllers/equipos.js')
+const partidosRouter = require('./controllers/partidos.js')
+const loginRouter = require('./controllers/login.js')
+const auth = require('./middlewares/auth.js')
 app.use(express.json()) // Nueva forma de usar el body-parser
 app.use(cors())
 
-const requestTime = function (request, response, next) {
-  console.log(Date('2021-01-01'))
+app.use((request, response, next) => {
+  console.log('New Request Type: ' + request.method + ' --- URL:' + request.path + ' --- ' + Date('2021-01-01'))
   next()
-}
-
-app.use(requestTime)
+})
 
 app.get('/', (request, response) => {
   response.send('<h1>Welcome to Soccer API </h1>')
 })
 
-app.get('/api/equipos', (request, response) => {
-  Equipo.find({}).then(result => {
-    response.json(result)
-  }).catch(error => {
-    response.json(error)
-  })
-})
+app.use('/api/login', loginRouter)
+app.use('/api/equipos', auth, equiposRouter)
+app.use('/api/partidos', auth, partidosRouter)
+app.use('/api/users', auth, usersRouter)
 
-app.get('/api/equipos/:nombre', (request, response) => {
-  const nombre = String(request.params.nombre)
-  Equipo.find({ name: nombre }).then(result => {
-    if (result.length > 0) {
-      response.json(result)
-    } else {
-      response.send('<h5>No hay equipos con este nombre</h5>')
-    }
-  }).catch(error => {
-    response.status(404).json({
-      error
-    })
-  })
-})
-
-app.post('/api/equipos', (request, response) => {
-  const data = request.body
-  const equipo = new Equipo({
-    name: data.name,
-    country: data.country,
-    players: data.players,
-    coach: data.coach
-  })
-
-  equipo.save().then(result => {
-    response.json(result)
-  }).catch(error => {
-    response.status(201).json(error)
-  })
-})
-
-app.delete('/api/equipos/:nombre', (request, response) => {
-  const nombre = String(request.params.nombre)
-  Equipo.deleteOne({ name: nombre }).then(result => {
-    response.json(result)
-  }).catch(error => {
-    response.json({
-      error
-    })
-  })
-})
-
-app.get('/api/partidos', (request, response) => {
-  Partido.find({}).then(result => {
-    response.json(result)
-  }).catch(error => {
-    response.json({
-      error
-    })
-  })
-})
-
-app.post('/api/partidos', (request, response) => {
-  const data = request.body
-  const partido = new Partido({
-    equipo1: data.equipo1,
-    equipo2: data.equipo2,
-    goles1: data.goles1,
-    goles2: data.goles2,
-    ciudad: data.ciudad,
-    fecha: data.fecha,
-    jugado: data.jugado
-  })
-
-  partido.save().then(result => {
-    response.json(result)
-  }).catch(error => {
-    response.status(201).json(error)
-  })
-})
-
-app.use((request, response) => {
-  response.status(404).json({
-    error: 'Not found'
-  })
+app.use((error, request, response, next) => {
+  console.log(error)
+  response.status(404).json({ error: error.message })
 })
 
 const PORT = 3000
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT} at http://localhost:${PORT}`)
 })
+
+module.exports = { app, server }
